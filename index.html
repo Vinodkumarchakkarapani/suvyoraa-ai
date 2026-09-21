@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suvyora AI — Intelligence & Research Platform</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* Theme Variables Definition */
+    :root {
+      --bg-base: #0f172a;
+      --bg-gradient-from: #1e1b4b;
+      --bg-gradient-via: #0f172a;
+      --bg-gradient-to: #311042;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --input-bg: rgba(15, 23, 42, 0.8);
+      --glow-1: rgba(99, 102, 241, 0.35);
+      --glow-2: rgba(168, 85, 247, 0.35);
+    }
+
+    /* PRESET THEMES - DIRECT DISTINCT BACKGROUND GRADIENTS */
+    body[data-theme="cosmic"] {
+      --bg-base: #0f172a;
+      --bg-gradient-from: #1e1b4b;
+      --bg-gradient-via: #111827;
+      --bg-gradient-to: #2e1065;
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --card-border: rgba(129, 140, 248, 0.25);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --input-bg: rgba(15, 23, 42, 0.85);
+      --glow-1: rgba(99, 102, 241, 0.4);
+      --glow-2: rgba(168, 85, 247, 0.35);
+    }
+
+    body[data-theme="slate"] {
+      --bg-base: #1e293b;
+      --bg-gradient-from: #334155;
+      --bg-gradient-via: #1e293b;
+      --bg-gradient-to: #0f172a;
+      --card-bg: rgba(51, 65, 85, 0.75);
+      --card-border: rgba(255, 255, 255, 0.18);
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --accent: #38bdf8;
+      --input-bg: rgba(30, 41, 59, 0.9);
+      --glow-1: rgba(56, 189, 248, 0.3);
+      --glow-2: rgba(99, 102, 241, 0.3);
+    }
+
+    body[data-theme="emerald"] {
+      --bg-base: #022c22;
+      --bg-gradient-from: #064e3b;
+      --bg-gradient-via: #022c22;
+      --bg-gradient-to: #0f172a;
+      --card-bg: rgba(6, 78, 59, 0.65);
+      --card-border: rgba(52, 211, 153, 0.3);
+      --text-main: #f0fdf4;
+      --text-muted: #a7f3d0;
+      --accent: #10b981;
+      --input-bg: rgba(2, 44, 34, 0.85);
+      --glow-1: rgba(16, 185, 129, 0.4);
+      --glow-2: rgba(20, 184, 166, 0.35);
+    }
+
+    body[data-theme="violet"] {
+      --bg-base: #2e1065;
+      --bg-gradient-from: #581c87;
+      --bg-gradient-via: #2e1065;
+      --bg-gradient-to: #3b0764;
+      --card-bg: rgba(88, 28, 135, 0.65);
+      --card-border: rgba(216, 180, 254, 0.3);
+      --text-main: #faf5ff;
+      --text-muted: #e9d5ff;
+      --accent: #a855f7;
+      --input-bg: rgba(46, 16, 101, 0.85);
+      --glow-1: rgba(168, 85, 247, 0.4);
+      --glow-2: rgba(236, 72, 153, 0.35);
+    }
+
+    body[data-theme="crimson"] {
+      --bg-base: #450a0a;
+      --bg-gradient-from: #7f1d1d;
+      --bg-gradient-via: #450a0a;
+      --bg-gradient-to: #2e1065;
+      --card-bg: rgba(127, 29, 29, 0.65);
+      --card-border: rgba(252, 165, 165, 0.3);
+      --text-main: #fef2f2;
+      --text-muted: #fca5a5;
+      --accent: #ef4444;
+      --input-bg: rgba(69, 10, 10, 0.85);
+      --glow-1: rgba(239, 68, 68, 0.4);
+      --glow-2: rgba(249, 115, 22, 0.35);
+    }
+
+    body[data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-gradient-from: #e0e7ff;
+      --bg-gradient-via: #f1f5f9;
+      --bg-gradient-to: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(203, 213, 225, 0.8);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --accent: #4f46e5;
+      --input-bg: rgba(255, 255, 255, 0.95);
+      --glow-1: rgba(99, 102, 241, 0.2);
+      --glow-2: rgba(192, 132, 252, 0.25);
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: radial-gradient(at 0% 0%, var(--bg-gradient-from) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, var(--bg-gradient-to) 0px, transparent 50%),
+                        radial-gradient(at 50% 50%, var(--bg-gradient-via) 0px, transparent 100%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.6s ease, background-image 0.6s ease, color 0.4s ease;
+    }
+
+    /* Ambient Floating Glow Orbs */
+    .glow-orb-1 {
+      position: fixed;
+      top: 5%;
+      left: 10%;
+      width: 450px;
+      height: 450px;
+      background: var(--glow-1);
+      filter: blur(120px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.6s ease;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .glow-orb-2 {
+      position: fixed;
+      bottom: 5%;
+      right: 10%;
+      width: 500px;
+      height: 500px;
+      background: var(--glow-2);
+      filter: blur(130px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.6s ease;
+      animation: floatOrb 22s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, 40px) scale(1.1); }
+      100% { transform: translate(-20px, -30px) scale(0.95); }
+    }
+
+    /* Glass Panels */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    .glass-input {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
+
+    .prose p { margin-bottom: 0.75rem; line-height: 1.625; }
+    .prose code:not(pre code) { background: rgba(148, 163, 184, 0.2); padding: 0.15rem 0.35rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+  </style>
+</head>
+<body data-theme="cosmic" class="h-full flex flex-col overflow-hidden antialiased relative">
+
+  <!-- Ambient Background Glowing Orbs for Visible Colors -->
+  <div class="glow-orb-1"></div>
+  <div class="glow-orb-2"></div>
+
+  <div class="flex h-full w-full overflow-hidden z-10 relative">
+
+    <!-- Collapsible Sidebar -->
+    <aside id="sidebar" class="w-72 glass-card border-r flex flex-col shrink-0 transition-all duration-300 z-30">
+      
+      <!-- Brand Header -->
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <div class="flex items-center gap-3 select-none">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-bold text-white shadow-lg">
+            <i class="fa-solid fa-sparkles text-base"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-base tracking-tight flex items-center gap-1.5">
+              Suvyora <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/30 text-indigo-300 font-semibold uppercase">PRO</span>
+            </h1>
+            <p class="text-[10px] opacity-70 tracking-wide uppercase font-semibold">AI Intelligence Platform</p>
+          </div>
+        </div>
+        <button onclick="toggleSidebar()" class="p-1.5 rounded-lg hover:bg-white/10 transition" title="Close Sidebar">
+          <i class="fa-solid fa-sidebar text-sm opacity-70"></i>
+        </button>
+      </div>
+
+      <!-- New Thread Button -->
+      <div class="p-3">
+        <button onclick="createNewThread()" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium text-sm transition shadow-lg shadow-indigo-600/30">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span>New Thread</span>
+          <span class="ml-auto text-[10px] bg-white/20 px-1.5 py-0.5 rounded font-mono">⌘K</span>
+        </button>
+      </div>
+
+      <!-- History List -->
+      <div class="flex-1 overflow-y-auto px-3 py-2 space-y-3">
+        <div class="text-[10px] font-semibold opacity-60 uppercase tracking-wider px-2">Research Threads</div>
+        <div id="thread-history" class="space-y-1">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="p-3 border-t border-white/10 space-y-2">
+        <div class="p-2.5 rounded-xl glass-input flex items-center justify-between">
+          <div class="flex items-center gap-2 overflow-hidden">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <div class="truncate text-xs font-medium" id="engine-status">Gemini 2.5 Flash Grounded</div>
+          </div>
+          <button onclick="openKeyModal()" class="opacity-70 hover:opacity-100 p-1" title="API Settings">
+            <i class="fa-solid fa-gear text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+      
+      <!-- Top Navigation Bar -->
+      <header class="h-14 px-4 md:px-6 flex items-center justify-between border-b border-white/10 glass-card z-20 shrink-0">
+        <div class="flex items-center gap-3">
+          <button id="sidebar-open-btn" onclick="toggleSidebar()" class="hidden p-1.5 rounded-lg hover:bg-white/10 transition" title="Open Sidebar">
+            <i class="fa-solid fa-bars text-sm"></i>
+          </button>
+
+          <!-- Model Indicator -->
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-input text-xs font-medium">
+            <i class="fa-solid fa-globe text-indigo-400"></i>
+            <span>Suvyora Grounded (Google Search API)</span>
+          </div>
+        </div>
+
+        <!-- Right Controls: VIBRANT DYNAMIC THEME SELECTOR -->
+        <div class="flex items-center gap-2">
+          
+          <!-- Theme Dropdown Button -->
+          <div class="relative">
+            <button onclick="toggleThemeDropdown()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-600/30 border border-indigo-400/40 text-xs font-semibold text-white hover:bg-indigo-600/50 transition">
+              <i class="fa-solid fa-palette text-indigo-300"></i>
+              <span id="current-theme-label">Theme: Deep Cosmic</span>
+              <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
+            </button>
+
+            <!-- Theme Dropdown Box -->
+            <div id="theme-menu" class="hidden absolute right-0 mt-2 w-56 rounded-2xl glass-card p-2 shadow-2xl z-50 space-y-1">
+              <div class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider opacity-60">Select Background Glow</div>
+              
+              <button onclick="setTheme('cosmic')" class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/10 text-xs font-medium transition">
+                <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full bg-indigo-600 border border-purple-400"></span> Deep Cosmic</span>
+                <i class="fa-solid fa-check text-indigo-400 text-xs hidden" id="check-cosmic"></i>
+              </button>
+
+              <button onclick="setTheme('slate')" class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/10 text-xs font-medium transition">
+                <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full bg-slate-600 border border-sky-400"></span> Slate Modern</span>
+                <i class="fa-solid fa-check text-sky-400 text-xs hidden" id="check-slate"></i>
+              </button>
+
+              <button onclick="setTheme('emerald')" class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/10 text-xs font-medium transition">
+                <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full bg-emerald-600 border border-teal-300"></span> Emerald Night</span>
+                <i class="fa-solid fa-check text-emerald-400 text-xs hidden" id="check-emerald"></i>
+              </button>
+
+              <button onclick="setTheme('violet')" class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/10 text-xs font-medium transition">
+                <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full bg-purple-700 border border-pink-400"></span> Dark Violet Glow</span>
+                <i class="fa-solid fa-check text-purple-400 text-xs hidden" id="check-violet"></i>
+              </button>
+
+              <button onclick="setTheme('crimson')" class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/10 text-xs font-medium transition">
+                <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full bg-rose-800 border border-red-400"></span> Sunset Crimson</span>
+                <i class="fa-solid fa-check text-rose-400 text-xs hidden" id="check-crimson"></i>
+              </button>
+
+              <button onclick="setTheme('light')" class="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/10 text-xs font-medium transition">
+                <span class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full bg-slate-100 border border-slate-400"></span> Light Mode</span>
+                <i class="fa-solid fa-check text-indigo-600 text-xs hidden" id="check-light"></i>
+              </button>
+            </div>
+          </div>
+
+          <button onclick="clearChat()" class="px-2.5 py-1.5 rounded-xl hover:bg-rose-500/20 hover:text-rose-300 text-xs transition" title="Clear Thread">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+          
+          <button onclick="openKeyModal()" class="px-3 py-1.5 rounded-xl glass-input text-xs font-medium flex items-center gap-1.5">
+            <i class="fa-solid fa-key text-indigo-400"></i>
+            <span id="api-key-badge">Set Key</span>
+          </button>
+        </div>
+      </header>
+
+      <div id="chat-canvas" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 max-w-4xl mx-auto w-full">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-box" class="py-12 flex flex-col items-center justify-center text-center space-y-6">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-2xl">
+            <i class="fa-solid fa-compass text-2xl text-white"></i>
+          </div>
+          <div class="max-w-md space-y-2">
+            <h2 class="text-2xl font-bold tracking-tight">Suvyora AI Research Suite</h2>
+            <p class="text-sm opacity-80 leading-relaxed">
+              Real-time web grounded answers powered by Google Search. Choose a background theme from the top menu to customize your environment.
+            </p>
+          </div>
+
+          <!-- Quick Starter Chips -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl pt-4">
+            <button onclick="quickSend('Summarize today\'s top news in artificial intelligence and tech.')" class="p-3 rounded-xl glass-card hover:bg-white/10 text-left text-xs transition space-y-1">
+              <div class="font-semibold text-indigo-300">⚡ Live Tech Briefing</div>
+              <p class="opacity-70 text-[11px]">Get today's top updates on global tech advances.</p>
+            </button>
+            <button onclick="quickSend('What are the latest scientific discoveries in space exploration?')" class="p-3 rounded-xl glass-card hover:bg-white/10 text-left text-xs transition space-y-1">
+              <div class="font-semibold text-indigo-300">🌌 Space & Astronomy</div>
+              <p class="opacity-70 text-[11px]">Fetch up-to-date web research on space missions.</p>
+            </button>
+          </div>
+        </div>
+
+        <div id="messages-list" class="space-y-6"></div>
+      </div>
+
+      <!-- Prompt Input Footer -->
+      <div class="p-4 md:px-8 max-w-4xl mx-auto w-full shrink-0">
+        <form onsubmit="handleSubmit(event)" class="glass-card rounded-2xl p-3 space-y-2 shadow-2xl border">
+          <textarea 
+            id="prompt-input" 
+            rows="2" 
+            placeholder="Ask Suvyora AI or search live web data..."
+            class="w-full bg-transparent outline-none text-sm resize-none pr-4 font-sans"
+            onkeydown="onKeyPrompt(event)"></textarea>
+
+          <div class="flex items-center justify-between pt-2 border-t border-white/10">
+            <div class="flex items-center gap-2 text-xs font-medium text-indigo-300">
+              <i class="fa-solid fa-globe text-xs"></i>
+              <span>Google Web Search Grounding Active</span>
+            </div>
+
+            <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium text-xs transition flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+              <span>Send</span>
+              <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- API Key Modal -->
+  <div id="key-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
+    <div class="glass-card p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl border border-white/20">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="font-bold text-sm">Suvyora AI — Google Gemini Key</h3>
+        <button onclick="closeKeyModal()" class="opacity-70 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p class="text-xs opacity-80 leading-relaxed">
+        Enter your free Google Gemini API Key to enable live response generation grounded with Google Search results.
+      </p>
+
+      <input 
+        type="password" 
+        id="key-input" 
+        placeholder="AIzaSy..." 
+        class="w-full glass-input rounded-xl px-3.5 py-2 text-xs outline-none focus:border-indigo-400 font-mono" />
+
+      <div class="flex items-center justify-between pt-2">
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-xs text-indigo-400 hover:underline">Get Free API Key</a>
+        <div class="flex gap-2">
+          <button onclick="closeKeyModal()" class="px-3 py-1.5 text-xs opacity-70 hover:opacity-100">Cancel</button>
+          <button onclick="saveKey()" class="px-4 py-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 rounded-xl text-white font-medium">Save Key</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // App State
+    const STATE = {
+      apiKey: localStorage.getItem('suvyora_key') || '',
+      theme: localStorage.getItem('suvyora_theme') || 'cosmic',
+      threads: [
+        { id: 't1', title: 'Global AI Market Analysis' },
+        { id: 't2', title: 'Web Search Grounding Notes' }
+      ]
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTheme(STATE.theme, false);
+      renderThreads();
+      updateKeyUI();
+    });
+
+    // Toggle Sidebar
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const openBtn = document.getElementById('sidebar-open-btn');
+      sidebar.classList.toggle('-ml-72');
+      if (sidebar.classList.contains('-ml-72')) {
+        openBtn.classList.remove('hidden');
+      } else {
+        openBtn.classList.add('hidden');
+      }
+    }
+
+    // Dynamic Theme Switcher with IMMEDIATE VISIBLE CHANGES
+    function toggleThemeDropdown() {
+      document.getElementById('theme-menu').classList.toggle('hidden');
+    }
+
+    function setTheme(themeName, hideMenu = true) {
+      STATE.theme = themeName;
+      document.body.setAttribute('data-theme', themeName);
+      localStorage.setItem('suvyora_theme', themeName);
+
+      // Hide all checkmarks
+      ['cosmic', 'slate', 'emerald', 'violet', 'crimson', 'light'].forEach(t => {
+        const el = document.getElementById(`check-${t}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      // Show active checkmark
+      const activeCheck = document.getElementById(`check-${themeName}`);
+      if (activeCheck) activeCheck.classList.remove('hidden');
+
+      // Update Header Button Label
+      const themeLabels = {
+        cosmic: 'Deep Cosmic',
+        slate: 'Slate Modern',
+        emerald: 'Emerald Night',
+        violet: 'Dark Violet Glow',
+        crimson: 'Sunset Crimson',
+        light: 'Light Mode'
+      };
+      document.getElementById('current-theme-label').innerText = `Theme: ${themeLabels[themeName] || 'Cosmic'}`;
+
+      if (hideMenu) {
+        document.getElementById('theme-menu').classList.add('hidden');
+      }
+    }
+
+    // Modal
+    function openKeyModal() {
+      document.getElementById('key-input').value = STATE.apiKey;
+      document.getElementById('key-modal').classList.remove('hidden');
+    }
+
+    function closeKeyModal() {
+      document.getElementById('key-modal').classList.add('hidden');
+    }
+
+    function saveKey() {
+      STATE.apiKey = document.getElementById('key-input').value.trim();
+      localStorage.setItem('suvyora_key', STATE.apiKey);
+      updateKeyUI();
+      closeKeyModal();
+    }
+
+    function updateKeyUI() {
+      const badge = document.getElementById('api-key-badge');
+      if (STATE.apiKey) {
+        badge.innerText = 'Key Saved';
+      } else {
+        badge.innerText = 'Set Key';
+      }
+    }
+
+    function renderThreads() {
+      const list = document.getElementById('thread-history');
+      list.innerHTML = STATE.threads.map(t => `
+        <button class="w-full text-left px-2.5 py-2 text-xs rounded-xl hover:bg-white/10 transition truncate flex items-center gap-2">
+          <i class="fa-regular fa-message opacity-60"></i>
+          <span class="truncate">${t.title}</span>
+        </button>
+      `).join('');
+    }
+
+    function createNewThread() {
+      clearChat();
+    }
+
+    function clearChat() {
+      document.getElementById('messages-list').innerHTML = '';
+      document.getElementById('welcome-box').classList.remove('hidden');
+    }
+
+    function quickSend(txt) {
+      document.getElementById('prompt-input').value = txt;
+      handleSubmit(new Event('submit'));
+    }
+
+    function onKeyPrompt(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSubmit(new Event('submit'));
+      }
+    }
+
+    async function handleSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('prompt-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      document.getElementById('welcome-box').classList.add('hidden');
+
+      // Append User Prompt
+      appendUserMsg(text);
+      input.value = '';
+
+      const respId = 'msg-' + Date.now();
+      appendBotSkeleton(respId);
+
+      if (STATE.apiKey) {
+        await callGeminiGrounding(text, respId);
+      } else {
+        await simulateResponse(text, respId);
+      }
+    }
+
+    function appendUserMsg(txt) {
+      const list = document.getElementById('messages-list');
+      const div = document.createElement('div');
+      div.className = "flex justify-end";
+      div.innerHTML = `
+        <div class="max-w-[80%] bg-indigo-600 text-white p-4 rounded-2xl rounded-tr-sm text-sm leading-relaxed shadow-lg">
+          ${escapeHtml(txt)}
+        </div>
+      `;
+      list.appendChild(div);
+      scrollToBottom();
+    }
+
+    function appendBotSkeleton(id) {
+      const list = document.getElementById('messages-list');
+      const div = document.createElement('div');
+      div.id = id;
+      div.className = "flex items-start gap-3 max-w-[85%]";
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-md">
+          <i class="fa-solid fa-sparkles text-xs"></i>
+        </div>
+        <div class="space-y-2 flex-1">
+          <div class="text-xs font-semibold text-indigo-300 flex items-center gap-2">
+            <i class="fa-solid fa-circle-notch fa-spin text-xs"></i>
+            <span>Searching Google & Generating...</span>
+          </div>
+          <div id="${id}-body" class="p-4 rounded-2xl glass-card text-sm leading-relaxed prose"></div>
+        </div>
+      `;
+      list.appendChild(div);
+      scrollToBottom();
+    }
+
+    async function callGeminiGrounding(promptText, id) {
+      const bodyEl = document.getElementById(`${id}-body`);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${STATE.apiKey}`;
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: promptText }] }],
+            tools: [{ googleSearch: {} }]
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.candidates && data.candidates[0].content) {
+          const reply = data.candidates[0].content.parts[0].text;
+          bodyEl.innerHTML = marked.parse(reply);
+        } else {
+          bodyEl.innerText = "Error fetching response. Please check your Gemini API key.";
+        }
+      } catch (err) {
+        bodyEl.innerText = "Connection error. Please try again.";
+      }
+      scrollToBottom();
+    }
+
+    async function simulateResponse(promptText, id) {
+      const bodyEl = document.getElementById(`${id}-body`);
+      await new Promise(r => setTimeout(r, 1000));
+      
+      const demoMarkdown = `
+### Suvyora AI Response (Demo Mode)
+
+You asked: **"${escapeHtml(promptText)}"**
+
+- To unlock live Google Search responses, enter your **Google Gemini API Key** in the top-right button.
+- You can dynamically change background themes anytime using the **Theme** menu at the top.
+      `;
+      bodyEl.innerHTML = marked.parse(demoMarkdown);
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      const canvas = document.getElementById('chat-canvas');
+      canvas.scrollTop = canvas.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
